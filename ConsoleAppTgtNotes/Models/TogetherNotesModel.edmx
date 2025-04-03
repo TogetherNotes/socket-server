@@ -1,0 +1,1372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TgtNotesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="activity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="type" Type="nvarchar" MaxLength="20" />
+          <Property Name="description" Type="nvarchar" MaxLength="255" />
+          <Property Name="date" Type="date" />
+          <Property Name="admin_user_id" Type="int" />
+        </EntityType>
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="mail" Type="nvarchar" MaxLength="255" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" />
+          <Property Name="role_id" Type="int" />
+        </EntityType>
+        <EntityType Name="app">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="mail" Type="nvarchar" MaxLength="255" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" />
+          <Property Name="role" Type="nvarchar" MaxLength="60" />
+          <Property Name="rating" Type="int" />
+          <Property Name="latitude" Type="decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="active" Type="bit" />
+          <Property Name="language_id" Type="int" />
+        </EntityType>
+        <EntityType Name="artist_genres">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="genre_id" />
+          </Key>
+          <Property Name="artist_id" Type="int" Nullable="false" />
+          <Property Name="genre_id" Type="int" Nullable="false" />
+          <Property Name="creation_date" Type="date" />
+        </EntityType>
+        <EntityType Name="artists">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="chats">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="date" />
+          <Property Name="user1_id" Type="int" />
+          <Property Name="user2_id" Type="int" />
+        </EntityType>
+        <EntityType Name="contracts">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+            <PropertyRef Name="init_hour" />
+            <PropertyRef Name="end_hour" />
+          </Key>
+          <Property Name="artist_id" Type="int" Nullable="false" />
+          <Property Name="space_id" Type="int" Nullable="false" />
+          <Property Name="meet_type" Type="nvarchar" MaxLength="20" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" />
+          <Property Name="init_hour" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="end_hour" Type="datetimeoffset" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="files">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="app_id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="type" Type="nvarchar" MaxLength="20" />
+          <Property Name="date" Type="date" />
+          <Property Name="app_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="genres">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="incidences">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+            <PropertyRef Name="admin_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="int" Nullable="false" />
+          <Property Name="admin_user_id" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="languages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="matches">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+          </Key>
+          <Property Name="artist_id" Type="int" Nullable="false" />
+          <Property Name="space_id" Type="int" Nullable="false" />
+          <Property Name="match_date" Type="date" />
+        </EntityType>
+        <EntityType Name="messages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sender_id" Type="int" />
+          <Property Name="content" Type="nvarchar" MaxLength="255" />
+          <Property Name="send_at" Type="datetime" />
+          <Property Name="is_read" Type="bit" />
+          <Property Name="chat_id" Type="int" />
+        </EntityType>
+        <EntityType Name="notifications">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="app_id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="nvarchar" MaxLength="60" />
+          <Property Name="date" Type="date" />
+          <Property Name="app_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rating">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rating" Type="int" />
+          <Property Name="artist_id" Type="int" />
+          <Property Name="space_id" Type="int" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="spaces">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="int" Nullable="false" />
+          <Property Name="capacity" Type="int" />
+          <Property Name="zip_code" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="temp_match">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+          </Key>
+          <Property Name="artist_id" Type="int" Nullable="false" />
+          <Property Name="space_id" Type="int" Nullable="false" />
+          <Property Name="artist_like" Type="bit" />
+          <Property Name="space_like" Type="bit" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" />
+          <Property Name="request_date" Type="datetime" />
+        </EntityType>
+        <Association Name="fk_activity_admin">
+          <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
+          <End Role="activity" Type="Self.activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="activity">
+              <PropertyRef Name="admin_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_admin_role">
+          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
+          <End Role="admin" Type="Self.admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="admin">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_app_language">
+          <End Role="languages" Type="Self.languages" Multiplicity="0..1" />
+          <End Role="app" Type="Self.app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="languages">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="app">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_artist">
+          <End Role="artists" Type="Self.artists" Multiplicity="1" />
+          <End Role="artist_genres" Type="Self.artist_genres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="artists">
+              <PropertyRef Name="app_user_id" />
+            </Principal>
+            <Dependent Role="artist_genres">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_artists_app">
+          <End Role="app" Type="Self.app" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="artists" Type="Self.artists" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="artists">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chats_user1">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="chats" Type="Self.chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chats">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chats_user2">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="chats" Type="Self.chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chats">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_contracts_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="contracts" Type="Self.contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contracts">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_contracts_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="contracts" Type="Self.contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contracts">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_file_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="app_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_genre">
+          <End Role="genres" Type="Self.genres" Multiplicity="1" />
+          <End Role="artist_genres" Type="Self.artist_genres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="artist_genres">
+              <PropertyRef Name="genre_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_incidences_admin">
+          <End Role="admin" Type="Self.admin" Multiplicity="1" />
+          <End Role="incidences" Type="Self.incidences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="incidences">
+              <PropertyRef Name="admin_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_incidences_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="incidences" Type="Self.incidences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="incidences">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_matches_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="matches" Type="Self.matches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="matches">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_matches_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="matches" Type="Self.matches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="matches">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_messages_chat">
+          <End Role="chats" Type="Self.chats" Multiplicity="0..1" />
+          <End Role="messages" Type="Self.messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chats">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messages">
+              <PropertyRef Name="chat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notifications_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notifications">
+              <PropertyRef Name="app_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rating_artist">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="rating" Type="Self.rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rating">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rating_space">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="rating" Type="Self.rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rating">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_spaces_app">
+          <End Role="app" Type="Self.app" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="spaces" Type="Self.spaces" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="spaces">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_temp_match_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="temp_match" Type="Self.temp_match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="temp_match">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_temp_match_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="temp_match" Type="Self.temp_match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="temp_match">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TgtNotesModelStoreContainer">
+          <EntitySet Name="activity" EntityType="Self.activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="app" EntityType="Self.app" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="artist_genres" EntityType="Self.artist_genres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="artists" EntityType="Self.artists" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="chats" EntityType="Self.chats" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contracts" EntityType="Self.contracts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="files" EntityType="Self.files" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="genres" EntityType="Self.genres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="incidences" EntityType="Self.incidences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="languages" EntityType="Self.languages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="matches" EntityType="Self.matches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="messages" EntityType="Self.messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notifications" EntityType="Self.notifications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rating" EntityType="Self.rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="spaces" EntityType="Self.spaces" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp_match" EntityType="Self.temp_match" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_activity_admin" Association="Self.fk_activity_admin">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="activity" EntitySet="activity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_admin_role" Association="Self.fk_admin_role">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="admin" EntitySet="admin" />
+          </AssociationSet>
+          <AssociationSet Name="fk_app_language" Association="Self.fk_app_language">
+            <End Role="languages" EntitySet="languages" />
+            <End Role="app" EntitySet="app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_artist" Association="Self.fk_artist">
+            <End Role="artists" EntitySet="artists" />
+            <End Role="artist_genres" EntitySet="artist_genres" />
+          </AssociationSet>
+          <AssociationSet Name="fk_artists_app" Association="Self.fk_artists_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="artists" EntitySet="artists" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chats_user1" Association="Self.fk_chats_user1">
+            <End Role="app" EntitySet="app" />
+            <End Role="chats" EntitySet="chats" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chats_user2" Association="Self.fk_chats_user2">
+            <End Role="app" EntitySet="app" />
+            <End Role="chats" EntitySet="chats" />
+          </AssociationSet>
+          <AssociationSet Name="fk_contracts_artist" Association="Self.fk_contracts_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="contracts" EntitySet="contracts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_contracts_space" Association="Self.fk_contracts_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="contracts" EntitySet="contracts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_file_app" Association="Self.fk_file_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="fk_genre" Association="Self.fk_genre">
+            <End Role="genres" EntitySet="genres" />
+            <End Role="artist_genres" EntitySet="artist_genres" />
+          </AssociationSet>
+          <AssociationSet Name="fk_incidences_admin" Association="Self.fk_incidences_admin">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="incidences" EntitySet="incidences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_incidences_app" Association="Self.fk_incidences_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="incidences" EntitySet="incidences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_matches_artist" Association="Self.fk_matches_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="matches" EntitySet="matches" />
+          </AssociationSet>
+          <AssociationSet Name="fk_matches_space" Association="Self.fk_matches_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="matches" EntitySet="matches" />
+          </AssociationSet>
+          <AssociationSet Name="fk_messages_chat" Association="Self.fk_messages_chat">
+            <End Role="chats" EntitySet="chats" />
+            <End Role="messages" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notifications_app" Association="Self.fk_notifications_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="notifications" EntitySet="notifications" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rating_artist" Association="Self.fk_rating_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="rating" EntitySet="rating" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rating_space" Association="Self.fk_rating_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="rating" EntitySet="rating" />
+          </AssociationSet>
+          <AssociationSet Name="fk_spaces_app" Association="Self.fk_spaces_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="spaces" EntitySet="spaces" />
+          </AssociationSet>
+          <AssociationSet Name="fk_temp_match_artist" Association="Self.fk_temp_match_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="temp_match" EntitySet="temp_match" />
+          </AssociationSet>
+          <AssociationSet Name="fk_temp_match_space" Association="Self.fk_temp_match_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="temp_match" EntitySet="temp_match" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TgtNotesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="activity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="admin_user_id" Type="Int32" />
+          <NavigationProperty Name="admin" Relationship="Self.fk_activity_admin" FromRole="activity" ToRole="admin" />
+        </EntityType>
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="mail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="role_id" Type="Int32" />
+          <NavigationProperty Name="activity" Relationship="Self.fk_activity_admin" FromRole="admin" ToRole="activity" />
+          <NavigationProperty Name="roles" Relationship="Self.fk_admin_role" FromRole="admin" ToRole="roles" />
+          <NavigationProperty Name="incidences" Relationship="Self.fk_incidences_admin" FromRole="admin" ToRole="incidences" />
+        </EntityType>
+        <EntityType Name="app">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="mail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="rating" Type="Int32" />
+          <Property Name="latitude" Type="Decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="active" Type="Boolean" />
+          <Property Name="language_id" Type="Int32" />
+          <NavigationProperty Name="languages" Relationship="Self.fk_app_language" FromRole="app" ToRole="languages" />
+          <NavigationProperty Name="artists" Relationship="Self.fk_artists_app" FromRole="app" ToRole="artists" />
+          <NavigationProperty Name="chats" Relationship="Self.fk_chats_user1" FromRole="app" ToRole="chats" />
+          <NavigationProperty Name="chats1" Relationship="Self.fk_chats_user2" FromRole="app" ToRole="chats" />
+          <NavigationProperty Name="contracts" Relationship="Self.fk_contracts_artist" FromRole="app" ToRole="contracts" />
+          <NavigationProperty Name="contracts1" Relationship="Self.fk_contracts_space" FromRole="app" ToRole="contracts" />
+          <NavigationProperty Name="files" Relationship="Self.fk_file_app" FromRole="app" ToRole="files" />
+          <NavigationProperty Name="incidences" Relationship="Self.fk_incidences_app" FromRole="app" ToRole="incidences" />
+          <NavigationProperty Name="matches" Relationship="Self.fk_matches_artist" FromRole="app" ToRole="matches" />
+          <NavigationProperty Name="matches1" Relationship="Self.fk_matches_space" FromRole="app" ToRole="matches" />
+          <NavigationProperty Name="notifications" Relationship="Self.fk_notifications_app" FromRole="app" ToRole="notifications" />
+          <NavigationProperty Name="rating1" Relationship="Self.fk_rating_artist" FromRole="app" ToRole="rating" />
+          <NavigationProperty Name="rating2" Relationship="Self.fk_rating_space" FromRole="app" ToRole="rating" />
+          <NavigationProperty Name="spaces" Relationship="Self.fk_spaces_app" FromRole="app" ToRole="spaces" />
+          <NavigationProperty Name="temp_match" Relationship="Self.fk_temp_match_artist" FromRole="app" ToRole="temp_match" />
+          <NavigationProperty Name="temp_match1" Relationship="Self.fk_temp_match_space" FromRole="app" ToRole="temp_match" />
+        </EntityType>
+        <EntityType Name="artist_genres">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="genre_id" />
+          </Key>
+          <Property Name="artist_id" Type="Int32" Nullable="false" />
+          <Property Name="genre_id" Type="Int32" Nullable="false" />
+          <Property Name="creation_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="artists" Relationship="Self.fk_artist" FromRole="artist_genres" ToRole="artists" />
+          <NavigationProperty Name="genres" Relationship="Self.fk_genre" FromRole="artist_genres" ToRole="genres" />
+        </EntityType>
+        <EntityType Name="artists">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="app" Relationship="Self.fk_artists_app" FromRole="artists" ToRole="app" />
+          <NavigationProperty Name="artist_genres" Relationship="Self.fk_artist" FromRole="artists" ToRole="artist_genres" />
+        </EntityType>
+        <EntityType Name="chats">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="user1_id" Type="Int32" />
+          <Property Name="user2_id" Type="Int32" />
+          <NavigationProperty Name="app" Relationship="Self.fk_chats_user1" FromRole="chats" ToRole="app" />
+          <NavigationProperty Name="app1" Relationship="Self.fk_chats_user2" FromRole="chats" ToRole="app" />
+          <NavigationProperty Name="messages" Relationship="Self.fk_messages_chat" FromRole="chats" ToRole="messages" />
+        </EntityType>
+        <EntityType Name="contracts">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+            <PropertyRef Name="init_hour" />
+            <PropertyRef Name="end_hour" />
+          </Key>
+          <Property Name="artist_id" Type="Int32" Nullable="false" />
+          <Property Name="space_id" Type="Int32" Nullable="false" />
+          <Property Name="meet_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="init_hour" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="end_hour" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <NavigationProperty Name="app" Relationship="Self.fk_contracts_artist" FromRole="contracts" ToRole="app" />
+          <NavigationProperty Name="app1" Relationship="Self.fk_contracts_space" FromRole="contracts" ToRole="app" />
+        </EntityType>
+        <EntityType Name="files">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="app_id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="app_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="app" Relationship="Self.fk_file_app" FromRole="files" ToRole="app" />
+        </EntityType>
+        <EntityType Name="genres">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="artist_genres" Relationship="Self.fk_genre" FromRole="genres" ToRole="artist_genres" />
+        </EntityType>
+        <EntityType Name="incidences">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+            <PropertyRef Name="admin_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="Int32" Nullable="false" />
+          <Property Name="admin_user_id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin" Relationship="Self.fk_incidences_admin" FromRole="incidences" ToRole="admin" />
+          <NavigationProperty Name="app" Relationship="Self.fk_incidences_app" FromRole="incidences" ToRole="app" />
+        </EntityType>
+        <EntityType Name="languages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="app" Relationship="Self.fk_app_language" FromRole="languages" ToRole="app" />
+        </EntityType>
+        <EntityType Name="matches">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+          </Key>
+          <Property Name="artist_id" Type="Int32" Nullable="false" />
+          <Property Name="space_id" Type="Int32" Nullable="false" />
+          <Property Name="match_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="app" Relationship="Self.fk_matches_artist" FromRole="matches" ToRole="app" />
+          <NavigationProperty Name="app1" Relationship="Self.fk_matches_space" FromRole="matches" ToRole="app" />
+        </EntityType>
+        <EntityType Name="messages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sender_id" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="send_at" Type="DateTime" Precision="3" />
+          <Property Name="is_read" Type="Boolean" />
+          <Property Name="chat_id" Type="Int32" />
+          <NavigationProperty Name="chats" Relationship="Self.fk_messages_chat" FromRole="messages" ToRole="chats" />
+        </EntityType>
+        <EntityType Name="notifications">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="app_id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="app_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="app" Relationship="Self.fk_notifications_app" FromRole="notifications" ToRole="app" />
+        </EntityType>
+        <EntityType Name="rating">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rating1" Type="Int32" />
+          <Property Name="artist_id" Type="Int32" />
+          <Property Name="space_id" Type="Int32" />
+          <NavigationProperty Name="app" Relationship="Self.fk_rating_artist" FromRole="rating" ToRole="app" />
+          <NavigationProperty Name="app1" Relationship="Self.fk_rating_space" FromRole="rating" ToRole="app" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin" Relationship="Self.fk_admin_role" FromRole="roles" ToRole="admin" />
+        </EntityType>
+        <EntityType Name="spaces">
+          <Key>
+            <PropertyRef Name="app_user_id" />
+          </Key>
+          <Property Name="app_user_id" Type="Int32" Nullable="false" />
+          <Property Name="capacity" Type="Int32" />
+          <Property Name="zip_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="app" Relationship="Self.fk_spaces_app" FromRole="spaces" ToRole="app" />
+        </EntityType>
+        <EntityType Name="temp_match">
+          <Key>
+            <PropertyRef Name="artist_id" />
+            <PropertyRef Name="space_id" />
+          </Key>
+          <Property Name="artist_id" Type="Int32" Nullable="false" />
+          <Property Name="space_id" Type="Int32" Nullable="false" />
+          <Property Name="artist_like" Type="Boolean" />
+          <Property Name="space_like" Type="Boolean" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="request_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="app" Relationship="Self.fk_temp_match_artist" FromRole="temp_match" ToRole="app" />
+          <NavigationProperty Name="app1" Relationship="Self.fk_temp_match_space" FromRole="temp_match" ToRole="app" />
+        </EntityType>
+        <Association Name="fk_activity_admin">
+          <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
+          <End Role="activity" Type="Self.activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="activity">
+              <PropertyRef Name="admin_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_admin_role">
+          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
+          <End Role="admin" Type="Self.admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="admin">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_incidences_admin">
+          <End Role="admin" Type="Self.admin" Multiplicity="1" />
+          <End Role="incidences" Type="Self.incidences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="incidences">
+              <PropertyRef Name="admin_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_app_language">
+          <End Role="languages" Type="Self.languages" Multiplicity="0..1" />
+          <End Role="app" Type="Self.app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="languages">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="app">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_artists_app">
+          <End Role="app" Type="Self.app" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="artists" Type="Self.artists" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="artists">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chats_user1">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="chats" Type="Self.chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chats">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chats_user2">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="chats" Type="Self.chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chats">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_contracts_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="contracts" Type="Self.contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contracts">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_contracts_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="contracts" Type="Self.contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contracts">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_file_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="app_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_incidences_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="incidences" Type="Self.incidences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="incidences">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_matches_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="matches" Type="Self.matches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="matches">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_matches_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="matches" Type="Self.matches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="matches">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notifications_app">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notifications">
+              <PropertyRef Name="app_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rating_artist">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="rating" Type="Self.rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rating">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rating_space">
+          <End Role="app" Type="Self.app" Multiplicity="0..1" />
+          <End Role="rating" Type="Self.rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rating">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_spaces_app">
+          <End Role="app" Type="Self.app" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="spaces" Type="Self.spaces" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="spaces">
+              <PropertyRef Name="app_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_temp_match_artist">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="temp_match" Type="Self.temp_match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="temp_match">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_temp_match_space">
+          <End Role="app" Type="Self.app" Multiplicity="1" />
+          <End Role="temp_match" Type="Self.temp_match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="app">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="temp_match">
+              <PropertyRef Name="space_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_artist">
+          <End Role="artists" Type="Self.artists" Multiplicity="1" />
+          <End Role="artist_genres" Type="Self.artist_genres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="artists">
+              <PropertyRef Name="app_user_id" />
+            </Principal>
+            <Dependent Role="artist_genres">
+              <PropertyRef Name="artist_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_genre">
+          <End Role="genres" Type="Self.genres" Multiplicity="1" />
+          <End Role="artist_genres" Type="Self.artist_genres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="artist_genres">
+              <PropertyRef Name="genre_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_messages_chat">
+          <End Role="chats" Type="Self.chats" Multiplicity="0..1" />
+          <End Role="messages" Type="Self.messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chats">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messages">
+              <PropertyRef Name="chat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TgtNotesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="activity" EntityType="Self.activity" />
+          <EntitySet Name="admin" EntityType="Self.admin" />
+          <EntitySet Name="app" EntityType="Self.app" />
+          <EntitySet Name="artist_genres" EntityType="Self.artist_genres" />
+          <EntitySet Name="artists" EntityType="Self.artists" />
+          <EntitySet Name="chats" EntityType="Self.chats" />
+          <EntitySet Name="contracts" EntityType="Self.contracts" />
+          <EntitySet Name="files" EntityType="Self.files" />
+          <EntitySet Name="genres" EntityType="Self.genres" />
+          <EntitySet Name="incidences" EntityType="Self.incidences" />
+          <EntitySet Name="languages" EntityType="Self.languages" />
+          <EntitySet Name="matches" EntityType="Self.matches" />
+          <EntitySet Name="messages" EntityType="Self.messages" />
+          <EntitySet Name="notifications" EntityType="Self.notifications" />
+          <EntitySet Name="rating" EntityType="Self.rating" />
+          <EntitySet Name="roles" EntityType="Self.roles" />
+          <EntitySet Name="spaces" EntityType="Self.spaces" />
+          <EntitySet Name="temp_match" EntityType="Self.temp_match" />
+          <AssociationSet Name="fk_activity_admin" Association="Self.fk_activity_admin">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="activity" EntitySet="activity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_admin_role" Association="Self.fk_admin_role">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="admin" EntitySet="admin" />
+          </AssociationSet>
+          <AssociationSet Name="fk_incidences_admin" Association="Self.fk_incidences_admin">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="incidences" EntitySet="incidences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_app_language" Association="Self.fk_app_language">
+            <End Role="languages" EntitySet="languages" />
+            <End Role="app" EntitySet="app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_artists_app" Association="Self.fk_artists_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="artists" EntitySet="artists" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chats_user1" Association="Self.fk_chats_user1">
+            <End Role="app" EntitySet="app" />
+            <End Role="chats" EntitySet="chats" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chats_user2" Association="Self.fk_chats_user2">
+            <End Role="app" EntitySet="app" />
+            <End Role="chats" EntitySet="chats" />
+          </AssociationSet>
+          <AssociationSet Name="fk_contracts_artist" Association="Self.fk_contracts_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="contracts" EntitySet="contracts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_contracts_space" Association="Self.fk_contracts_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="contracts" EntitySet="contracts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_file_app" Association="Self.fk_file_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="fk_incidences_app" Association="Self.fk_incidences_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="incidences" EntitySet="incidences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_matches_artist" Association="Self.fk_matches_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="matches" EntitySet="matches" />
+          </AssociationSet>
+          <AssociationSet Name="fk_matches_space" Association="Self.fk_matches_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="matches" EntitySet="matches" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notifications_app" Association="Self.fk_notifications_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="notifications" EntitySet="notifications" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rating_artist" Association="Self.fk_rating_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="rating" EntitySet="rating" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rating_space" Association="Self.fk_rating_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="rating" EntitySet="rating" />
+          </AssociationSet>
+          <AssociationSet Name="fk_spaces_app" Association="Self.fk_spaces_app">
+            <End Role="app" EntitySet="app" />
+            <End Role="spaces" EntitySet="spaces" />
+          </AssociationSet>
+          <AssociationSet Name="fk_temp_match_artist" Association="Self.fk_temp_match_artist">
+            <End Role="app" EntitySet="app" />
+            <End Role="temp_match" EntitySet="temp_match" />
+          </AssociationSet>
+          <AssociationSet Name="fk_temp_match_space" Association="Self.fk_temp_match_space">
+            <End Role="app" EntitySet="app" />
+            <End Role="temp_match" EntitySet="temp_match" />
+          </AssociationSet>
+          <AssociationSet Name="fk_artist" Association="Self.fk_artist">
+            <End Role="artists" EntitySet="artists" />
+            <End Role="artist_genres" EntitySet="artist_genres" />
+          </AssociationSet>
+          <AssociationSet Name="fk_genre" Association="Self.fk_genre">
+            <End Role="genres" EntitySet="genres" />
+            <End Role="artist_genres" EntitySet="artist_genres" />
+          </AssociationSet>
+          <AssociationSet Name="fk_messages_chat" Association="Self.fk_messages_chat">
+            <End Role="chats" EntitySet="chats" />
+            <End Role="messages" EntitySet="messages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TgtNotesModelStoreContainer" CdmEntityContainer="TgtNotesEntities">
+          <EntitySetMapping Name="activity">
+            <EntityTypeMapping TypeName="TgtNotesModel.activity">
+              <MappingFragment StoreEntitySet="activity">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="admin_user_id" ColumnName="admin_user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admin">
+            <EntityTypeMapping TypeName="TgtNotesModel.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="app">
+            <EntityTypeMapping TypeName="TgtNotesModel.app">
+              <MappingFragment StoreEntitySet="app">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="language_id" ColumnName="language_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="artist_genres">
+            <EntityTypeMapping TypeName="TgtNotesModel.artist_genres">
+              <MappingFragment StoreEntitySet="artist_genres">
+                <ScalarProperty Name="artist_id" ColumnName="artist_id" />
+                <ScalarProperty Name="genre_id" ColumnName="genre_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="artists">
+            <EntityTypeMapping TypeName="TgtNotesModel.artists">
+              <MappingFragment StoreEntitySet="artists">
+                <ScalarProperty Name="app_user_id" ColumnName="app_user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chats">
+            <EntityTypeMapping TypeName="TgtNotesModel.chats">
+              <MappingFragment StoreEntitySet="chats">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="user1_id" ColumnName="user1_id" />
+                <ScalarProperty Name="user2_id" ColumnName="user2_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contracts">
+            <EntityTypeMapping TypeName="TgtNotesModel.contracts">
+              <MappingFragment StoreEntitySet="contracts">
+                <ScalarProperty Name="artist_id" ColumnName="artist_id" />
+                <ScalarProperty Name="space_id" ColumnName="space_id" />
+                <ScalarProperty Name="meet_type" ColumnName="meet_type" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="init_hour" ColumnName="init_hour" />
+                <ScalarProperty Name="end_hour" ColumnName="end_hour" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="files">
+            <EntityTypeMapping TypeName="TgtNotesModel.files">
+              <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="app_id" ColumnName="app_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="genres">
+            <EntityTypeMapping TypeName="TgtNotesModel.genres">
+              <MappingFragment StoreEntitySet="genres">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="incidences">
+            <EntityTypeMapping TypeName="TgtNotesModel.incidences">
+              <MappingFragment StoreEntitySet="incidences">
+                <ScalarProperty Name="app_user_id" ColumnName="app_user_id" />
+                <ScalarProperty Name="admin_user_id" ColumnName="admin_user_id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="languages">
+            <EntityTypeMapping TypeName="TgtNotesModel.languages">
+              <MappingFragment StoreEntitySet="languages">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="matches">
+            <EntityTypeMapping TypeName="TgtNotesModel.matches">
+              <MappingFragment StoreEntitySet="matches">
+                <ScalarProperty Name="artist_id" ColumnName="artist_id" />
+                <ScalarProperty Name="space_id" ColumnName="space_id" />
+                <ScalarProperty Name="match_date" ColumnName="match_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="messages">
+            <EntityTypeMapping TypeName="TgtNotesModel.messages">
+              <MappingFragment StoreEntitySet="messages">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="sender_id" ColumnName="sender_id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="send_at" ColumnName="send_at" />
+                <ScalarProperty Name="is_read" ColumnName="is_read" />
+                <ScalarProperty Name="chat_id" ColumnName="chat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notifications">
+            <EntityTypeMapping TypeName="TgtNotesModel.notifications">
+              <MappingFragment StoreEntitySet="notifications">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="app_id" ColumnName="app_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rating">
+            <EntityTypeMapping TypeName="TgtNotesModel.rating">
+              <MappingFragment StoreEntitySet="rating">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rating1" ColumnName="rating" />
+                <ScalarProperty Name="artist_id" ColumnName="artist_id" />
+                <ScalarProperty Name="space_id" ColumnName="space_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="TgtNotesModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spaces">
+            <EntityTypeMapping TypeName="TgtNotesModel.spaces">
+              <MappingFragment StoreEntitySet="spaces">
+                <ScalarProperty Name="app_user_id" ColumnName="app_user_id" />
+                <ScalarProperty Name="capacity" ColumnName="capacity" />
+                <ScalarProperty Name="zip_code" ColumnName="zip_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp_match">
+            <EntityTypeMapping TypeName="TgtNotesModel.temp_match">
+              <MappingFragment StoreEntitySet="temp_match">
+                <ScalarProperty Name="artist_id" ColumnName="artist_id" />
+                <ScalarProperty Name="space_id" ColumnName="space_id" />
+                <ScalarProperty Name="artist_like" ColumnName="artist_like" />
+                <ScalarProperty Name="space_like" ColumnName="space_like" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="request_date" ColumnName="request_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

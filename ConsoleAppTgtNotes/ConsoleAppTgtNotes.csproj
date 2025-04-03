@@ -69,6 +69,7 @@
     <Reference Include="System.Runtime.Serialization">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Runtime.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
@@ -94,15 +95,104 @@
   <ItemGroup>
     <Compile Include="DTO\AuthDTO.cs" />
     <Compile Include="DTO\SocketsDTO.cs" />
+    <Compile Include="Models\activity.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\admin.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\app.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\artists.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\artist_genres.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\chats.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\contracts.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\files.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\genres.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\incidences.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\languages.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\matches.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\messages.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\notifications.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\rating.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\roles.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spaces.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp_match.cs">
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TogetherNotesModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TogetherNotesModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TogetherNotesModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TogetherNotesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TogetherNotesModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TogetherNotesModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Server\ChatManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="Models\TogetherNotesModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TogetherNotesModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Models\TogetherNotesModel.edmx.diagram">
+      <DependentUpon>TogetherNotesModel.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Content Include="Models\TogetherNotesModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TogetherNotesModel.edmx</DependentUpon>
+      <LastGenOutput>TogetherNotesModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\TogetherNotesModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TogetherNotesModel.edmx</DependentUpon>
+      <LastGenOutput>TogetherNotesModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

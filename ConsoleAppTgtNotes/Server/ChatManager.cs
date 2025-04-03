@@ -7,6 +7,7 @@ using System.Threading;
 using System.Net.Sockets;
 using WebApplicationTgtNotes.DTO;
 using System.Collections.Concurrent;
+using ConsoleAppTgtNotes.Models;
 
 namespace ConsoleAppTgtNotes
 {
