@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using WebApplicationTgtNotes.DTO;
 using System.Collections.Concurrent;
 using ConsoleAppTgtNotes.Models;
+using System.Diagnostics;
 
 namespace ConsoleAppTgtNotes
 {
@@ -62,6 +63,7 @@ namespace ConsoleAppTgtNotes
 
                 using (var db = new TgtNotesEntities())
                 {
+                    // Verificar que el usuario exista
                     if (!db.app.Any(a => a.id == authData.userId))
                     {
                         SendResponse(stream, "User does not exist");
@@ -73,6 +75,27 @@ namespace ConsoleAppTgtNotes
                 ConnectedClients[currentUserId] = client;
                 Console.WriteLine($"[INFO] User {currentUserId} connected");
 
+                // Recuperar los mensajes de la base de datos para este usuario
+                using (var db = new TgtNotesEntities())
+                {
+                    var messages = db.messages
+                        .Where(m => m.chats.user1_id == currentUserId || m.chats.user2_id == currentUserId)
+                        .OrderBy(m => m.send_at) // Ordenar los mensajes por fecha de envío
+                        .ToList();
+
+                    // Enviar todos los mensajes al usuario
+                    foreach (var message in messages)
+                    {
+                        var responseMessage = JsonConvert.SerializeObject(new
+                        {
+                            from = message.sender_id,
+                            content = message.content
+                        });
+                        SendResponse(stream, responseMessage);
+                    }
+                }
+
+                // Continuar escuchando los mensajes entrantes
                 while ((byteCount = stream.Read(buffer, 0, buffer.Length)) != 0)
                 {
                     var message = Encoding.UTF8.GetString(buffer, 0, byteCount);
@@ -116,10 +139,12 @@ namespace ConsoleAppTgtNotes
                         db.SaveChanges();
                     }
 
+                    // Envía el mensaje al destinatario, si está conectado
                     if (ConnectedClients.TryGetValue(data.receiver_id, out var receiverClient))
                     {
                         try
                         {
+                            Console.WriteLine($"[INFO] Enviando mensaje al usuario {data.receiver_id}");
                             var receiverStream = receiverClient.GetStream();
                             SendResponse(receiverStream, JsonConvert.SerializeObject(new
                             {
@@ -127,11 +152,15 @@ namespace ConsoleAppTgtNotes
                                 content = data.content
                             }));
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Console.WriteLine($"[ERROR] Failed to send message to user {data.receiver_id}. Removing from active clients.");
+                            Console.WriteLine($"[ERROR] Failed to send message to user {data.receiver_id}. Error: {ex.Message}");
                             ConnectedClients.TryRemove(data.receiver_id, out _);
                         }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[INFO] Usuario {data.receiver_id} no está conectado");
                     }
                 }
             }
@@ -151,10 +180,13 @@ namespace ConsoleAppTgtNotes
             }
         }
 
+
         private void SendResponse(NetworkStream stream, string message)
         {
             var response = Encoding.UTF8.GetBytes(message);
             stream.Write(response, 0, response.Length);
+            stream.WriteByte((byte)'\n');  // Asegurando que la respuesta termina con un salto de línea
+
         }
     }
 }
