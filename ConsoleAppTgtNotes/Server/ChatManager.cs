@@ -5,7 +5,6 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Net.Sockets;
-using System.Diagnostics;
 using ConsoleAppTgtNotes.Models;
 using WebApplicationTgtNotes.DTO;
 using System.Collections.Concurrent;
