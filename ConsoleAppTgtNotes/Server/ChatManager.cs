@@ -1,14 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Net.Sockets;
-using WebApplicationTgtNotes.DTO;
-using System.Collections.Concurrent;
+﻿using WebApplicationTgtNotes.DTO;
 using ConsoleAppTgtNotes.Models;
-using System.Diagnostics;
 
 namespace ConsoleAppTgtNotes
 {
@@ -17,30 +8,41 @@ namespace ConsoleAppTgtNotes
         private const int Port = 5000;
         private TcpListener _server;
 
+        // Stores connected clients by user ID
         private static readonly ConcurrentDictionary<int, TcpClient> ConnectedClients = new ConcurrentDictionary<int, TcpClient>();
 
+        /// <summary>
+        /// Entry point of the chat server application.
+        /// </summary>
         public static void Main(string[] args)
         {
             var server = new ChatManager();
             server.StartServer();
         }
 
+        /// <summary>
+        /// Starts the TCP server and listens for incoming client connections.
+        /// </summary>
         public void StartServer()
         {
             _server = new TcpListener(IPAddress.Any, Port);
             _server.Start();
-            Console.WriteLine($"[SERVER] Listening on port {Port}...");
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [SERVER] Listening on port {Port}...");
 
             while (true)
             {
                 TcpClient client = _server.AcceptTcpClient();
-                Console.WriteLine("[SERVER] Client connected.");
+                Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [SERVER] Client connected.");
 
                 Thread clientThread = new Thread(HandleClient);
                 clientThread.Start(client);
             }
         }
 
+        /// <summary>
+        /// Handles a single client: authentication, message sync, message reception, and forwarding.
+        /// </summary>
+        /// <param name="obj">The connected TcpClient object.</param>
         private void HandleClient(object obj)
         {
             var client = (TcpClient)obj;
@@ -51,6 +53,7 @@ namespace ConsoleAppTgtNotes
 
             try
             {
+                // Receive and validate initial auth message
                 byteCount = stream.Read(buffer, 0, buffer.Length);
                 var authJson = Encoding.UTF8.GetString(buffer, 0, byteCount);
                 var authData = JsonConvert.DeserializeObject<AuthDTO>(authJson);
@@ -58,32 +61,32 @@ namespace ConsoleAppTgtNotes
                 if (authData == null || authData.type != "auth" || authData.userId <= 0)
                 {
                     SendResponse(stream, "Invalid auth format");
+                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [AUTH] Invalid auth format.");
                     return;
                 }
 
                 using (var db = new TgtNotesEntities())
                 {
-                    // Verificar que el usuario exista
                     if (!db.app.Any(a => a.id == authData.userId))
                     {
                         SendResponse(stream, "User does not exist");
+                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [AUTH] User {authData.userId} not found.");
                         return;
                     }
                 }
 
                 currentUserId = authData.userId;
                 ConnectedClients[currentUserId] = client;
-                Console.WriteLine($"[INFO] User {currentUserId} connected");
+                Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [INFO] User {currentUserId} connected.");
 
-                // Recuperar los mensajes de la base de datos para este usuario
+                // Send historical messages to the user
                 using (var db = new TgtNotesEntities())
                 {
                     var messages = db.messages
                         .Where(m => m.chats.user1_id == currentUserId || m.chats.user2_id == currentUserId)
-                        .OrderBy(m => m.send_at) // Ordenar los mensajes por fecha de envío
+                        .OrderBy(m => m.send_at)
                         .ToList();
 
-                    // Enviar todos los mensajes al usuario
                     foreach (var message in messages)
                     {
                         var responseMessage = JsonConvert.SerializeObject(new
@@ -95,17 +98,18 @@ namespace ConsoleAppTgtNotes
                     }
                 }
 
-                // Continuar escuchando los mensajes entrantes
+                // Listen for incoming messages
                 while ((byteCount = stream.Read(buffer, 0, buffer.Length)) != 0)
                 {
                     var message = Encoding.UTF8.GetString(buffer, 0, byteCount);
-                    Console.WriteLine($"[RECEIVED] {message}");
+                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [RECEIVED] {message}");
 
                     var data = JsonConvert.DeserializeObject<SocketsDTO>(message);
 
                     if (data == null || data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
                     {
                         SendResponse(stream, "Invalid or spoofed message");
+                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [SECURITY] Invalid or spoofed message from user {currentUserId}.");
                         continue;
                     }
 
@@ -139,12 +143,12 @@ namespace ConsoleAppTgtNotes
                         db.SaveChanges();
                     }
 
-                    // Envía el mensaje al destinatario, si está conectado
+                    // Forward message if receiver is connected
                     if (ConnectedClients.TryGetValue(data.receiver_id, out var receiverClient))
                     {
                         try
                         {
-                            Console.WriteLine($"[INFO] Enviando mensaje al usuario {data.receiver_id}");
+                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [INFO] Sending message to user {data.receiver_id}");
                             var receiverStream = receiverClient.GetStream();
                             SendResponse(receiverStream, JsonConvert.SerializeObject(new
                             {
@@ -154,39 +158,42 @@ namespace ConsoleAppTgtNotes
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[ERROR] Failed to send message to user {data.receiver_id}. Error: {ex.Message}");
+                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [ERROR] Failed to send to user {data.receiver_id}: {ex.Message}");
                             ConnectedClients.TryRemove(data.receiver_id, out _);
                         }
                     }
                     else
                     {
-                        Console.WriteLine($"[INFO] Usuario {data.receiver_id} no está conectado");
+                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [INFO] User {data.receiver_id} is offline.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ERROR] {ex.Message}");
+                Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [ERROR] {ex.Message}");
             }
             finally
             {
                 if (currentUserId > 0)
                 {
                     ConnectedClients.TryRemove(currentUserId, out _);
-                    Console.WriteLine($"[INFO] User {currentUserId} disconnected");
+                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [INFO] User {currentUserId} disconnected");
                 }
 
                 client.Close();
             }
         }
 
-
+        /// <summary>
+        /// Sends a string response to a client's stream.
+        /// </summary>
+        /// <param name="stream">The network stream to write to.</param>
+        /// <param name="message">The message to send as a response.</param>
         private void SendResponse(NetworkStream stream, string message)
         {
             var response = Encoding.UTF8.GetBytes(message);
             stream.Write(response, 0, response.Length);
-            stream.WriteByte((byte)'\n');  // Asegurando que la respuesta termina con un salto de línea
-
+            stream.WriteByte((byte)'\n'); // Ensure newline termination for client-side reading
         }
     }
 }
