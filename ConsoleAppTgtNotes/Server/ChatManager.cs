@@ -1,5 +1,14 @@
-﻿using WebApplicationTgtNotes.DTO;
+﻿using System;
+using System.Net;
+using System.Linq;
+using System.Text;
+using Newtonsoft.Json;
+using System.Threading;
+using System.Net.Sockets;
+using System.Diagnostics;
 using ConsoleAppTgtNotes.Models;
+using WebApplicationTgtNotes.DTO;
+using System.Collections.Concurrent;
 
 namespace ConsoleAppTgtNotes
 {
