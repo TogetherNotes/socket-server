@@ -93,9 +93,10 @@ namespace ConsoleAppTgtNotes
                 using (var db = new TgtNotesEntities())
                 {
                     var messages = db.messages
-                        .Where(m => m.chats.user1_id == currentUserId || m.chats.user2_id == currentUserId)
-                        .OrderBy(m => m.send_at)
-                        .ToList();
+                                    .Where(m => m.chat_id == authData.chatId) // 👈 Filtra por el chat específico
+                                    .OrderBy(m => m.send_at)
+                                    .ToList();
+
 
                     foreach (var message in messages)
                     {
@@ -154,15 +155,27 @@ namespace ConsoleAppTgtNotes
                             }
                             continue;
                         }
-    
 
 
-                        if (data == null || data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
+
+                        if (data == null)
                         {
-                            SendResponse(stream, "Invalid or spoofed message");
-                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [SECURITY] Invalid or spoofed message from user {currentUserId}.");
+                            Console.WriteLine($"[ERROR] Could not parse incoming JSON.");
                             continue;
                         }
+
+                        if (data.type == "auth")
+                        {
+                            Console.WriteLine($"[WARNING] Received duplicate auth from user {currentUserId}, ignoring.");
+                            continue;
+                        }
+
+                        if (data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
+                        {
+                            Console.WriteLine($"[SECURITY] Invalid or spoofed message from user {currentUserId}.");
+                            continue;
+                        }
+
 
                         using (var db = new TgtNotesEntities())
                         {

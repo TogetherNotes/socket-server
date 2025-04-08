@@ -2,7 +2,9 @@
 {
     public class AuthDTO
     {
-        public string type { get; set; } // "auth"
+        public string type { get; set; }
         public int userId { get; set; }
+        public int chatId { get; set; } // 👈 Añade esta propiedad
     }
+
 }
