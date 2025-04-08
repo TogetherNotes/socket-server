@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Linq;
 using System.Text;
@@ -88,15 +88,13 @@ namespace ConsoleAppTgtNotes
                 ConnectedClients[currentUserId] = client;
                 Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [INFO] User {currentUserId} connected.");
 
-                // Send historical messages to the user
-                // Enviar mensajes históricos a la interfaz del usuario sin marcar como leídos
+                // Send historical messages to the user without marking them as read
                 using (var db = new TgtNotesEntities())
                 {
                     var messages = db.messages
-                                    .Where(m => m.chat_id == authData.chatId) // 👈 Filtra por el chat específico
+                                    .Where(m => m.chat_id == authData.chatId)
                                     .OrderBy(m => m.send_at)
                                     .ToList();
-
 
                     foreach (var message in messages)
                     {
@@ -106,17 +104,14 @@ namespace ConsoleAppTgtNotes
                             message_id = message.id,
                             from = message.sender_id,
                             content = message.content,
-                            is_read = message.is_read  // No marcar como leído aquí
+                            is_read = message.is_read
                         });
 
                         SendResponse(stream, responseMessage);
-
                     }
 
-                    // Guardamos solo si hubo cambios
                     db.SaveChanges();
                 }
-
 
                 // Listen for incoming messages
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -133,30 +128,9 @@ namespace ConsoleAppTgtNotes
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [ERROR] JSON inválido: {ex.Message}");
+                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [ERROR] Invalid JSON: {ex.Message}");
                             continue;
                         }
-
-                        if (data.type == "read_ack" && data.message_id > 0)
-                        {
-                            using (var db = new TgtNotesEntities())
-                            {
-                                var msgToUpdate = db.messages.FirstOrDefault(m => m.id == data.message_id);
-                                if (msgToUpdate != null)
-                                {
-                                    // Solo marcamos como leído si no está ya marcado
-                                    if (!msgToUpdate.is_read.GetValueOrDefault())
-                                    {
-                                        msgToUpdate.is_read = true;
-                                        db.SaveChanges();
-                                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [READ_ACK] Mensaje {data.message_id} marcado como leído.");
-                                    }
-                                }
-                            }
-                            continue;
-                        }
-
-
 
                         if (data == null)
                         {
@@ -170,12 +144,26 @@ namespace ConsoleAppTgtNotes
                             continue;
                         }
 
+                        if (data.type == "read_ack" && data.message_id > 0)
+                        {
+                            using (var db = new TgtNotesEntities())
+                            {
+                                var msgToUpdate = db.messages.FirstOrDefault(m => m.id == data.message_id);
+                                if (msgToUpdate != null && !msgToUpdate.is_read.GetValueOrDefault())
+                                {
+                                    msgToUpdate.is_read = true;
+                                    db.SaveChanges();
+                                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [READ_ACK] Message {data.message_id} marked as read.");
+                                }
+                            }
+                            continue;
+                        }
+
                         if (data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
                         {
                             Console.WriteLine($"[SECURITY] Invalid or spoofed message from user {currentUserId}.");
                             continue;
                         }
-
 
                         using (var db = new TgtNotesEntities())
                         {
@@ -221,7 +209,6 @@ namespace ConsoleAppTgtNotes
                                         content = data.content,
                                         is_read = newMessage.is_read
                                     }));
-
                                 }
                                 catch (Exception ex)
                                 {
