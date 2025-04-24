@@ -159,38 +159,6 @@ namespace ConsoleAppTgtNotes
                             continue;
                         }
 
-                        if (data.type == "update_message" && data.message_id > 0 && !string.IsNullOrWhiteSpace(data.content))
-                        {
-                            using (var db = new TgtNotesEntities())
-                            {
-                                var msgToUpdate = db.messages.FirstOrDefault(m => m.id == data.message_id && m.sender_id == currentUserId);
-                                if (msgToUpdate != null)
-                                {
-                                    msgToUpdate.content = data.content;
-                                    db.SaveChanges();
-                                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [UPDATE] Message {data.message_id} updated by user {currentUserId}");
-
-                                    SendResponse(stream, JsonConvert.SerializeObject(new
-                                    {
-                                        type = "update_ack",
-                                        message_id = data.message_id,
-                                        status = "success"
-                                    }));
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [UPDATE] Message not found or unauthorized.");
-                                    SendResponse(stream, JsonConvert.SerializeObject(new
-                                    {
-                                        type = "update_ack",
-                                        message_id = data.message_id,
-                                        status = "not_found_or_unauthorized"
-                                    }));
-                                }
-                            }
-                            continue;
-                        }
-
                         if (data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
                         {
                             Console.WriteLine($"[SECURITY] Invalid or spoofed message from user {currentUserId}.");
