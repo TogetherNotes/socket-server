@@ -4,7 +4,7 @@
     {
         public string type { get; set; }
         public int userId { get; set; }
-        public int chatId { get; set; } // 👈 Añade esta propiedad
+        public int chatId { get; set; }
     }
 
 }

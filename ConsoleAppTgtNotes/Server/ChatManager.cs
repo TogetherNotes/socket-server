@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ using System.Net.Sockets;
 using ConsoleAppTgtNotes.Models;
 using WebApplicationTgtNotes.DTO;
 using System.Collections.Concurrent;
-using System.IO;
 
 namespace ConsoleAppTgtNotes
 {
