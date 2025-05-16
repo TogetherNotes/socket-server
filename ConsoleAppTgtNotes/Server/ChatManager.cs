@@ -137,7 +137,7 @@ namespace ConsoleAppTgtNotes
                             Console.WriteLine($"[ERROR] Could not parse incoming JSON.");
                             continue;
                         }
-
+                        /*
                         if (data.type == "auth")
                         {
                             Console.WriteLine($"[WARNING] Received duplicate auth from user {currentUserId}, ignoring.");
@@ -158,7 +158,7 @@ namespace ConsoleAppTgtNotes
                             }
                             continue;
                         }
-
+                        */
                         if (data.sender_id != currentUserId || data.receiver_id <= 0 || string.IsNullOrWhiteSpace(data.content))
                         {
                             Console.WriteLine($"[SECURITY] Invalid or spoofed message from user {currentUserId}.");
